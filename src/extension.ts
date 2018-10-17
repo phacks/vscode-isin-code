@@ -39,8 +39,7 @@ class ISINCodeHoverProvider implements HoverProvider {
   ): Promise<Hover> {
     let wordRange = document.getWordRangeAtPosition(position);
     let word = wordRange ? document.getText(wordRange) : "";
-    let unescapedWord = word.replace('"', '').replace('\'', '');
-    console.log(unescapedWord);
+    let unescapedWord = word.replace(/["':{}\s]/g, '');
 
     if (!wordRange || !unescapedWord.match(/^[A-Z]{2}[A-Z0-9]{9}\d$/)) {
       return Promise.resolve(new Hover(""));

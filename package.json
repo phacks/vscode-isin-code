@@ -11,7 +11,9 @@
         "Other"
     ],
     "activationEvents": [
-        "*"
+        "onLanguage:plaintext",
+        "onLanguage:json",
+        "onLanguage:csv"
     ],
     "main": "./out/extension",
     "capabilities": {
