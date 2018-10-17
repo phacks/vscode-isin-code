@@ -1,29 +1,89 @@
-'use strict';
+"use strict";
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+
+import vscode = require("vscode");
+import {
+  HoverProvider,
+  Hover,
+  MarkdownString,
+  TextDocument,
+  Position,
+  CancellationToken,
+  WorkspaceConfiguration
+} from "vscode";
+import axios, { AxiosError } from "axios";
+
+import { OpenFIGIAPIResponse } from "./types/OpenFIGIAPIResponseType";
+import { OutgoingHttpHeaders } from "http";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  context.subscriptions.push(
+    vscode.languages.registerHoverProvider("*", new ISINCodeHoverProvider())
+  );
+}
 
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "isin-code" is now active!');
+class ISINCodeHoverProvider implements HoverProvider {
+    private isinCodeConfig: WorkspaceConfiguration;
 
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-        // The code you place here will be executed every time your command is executed
+    constructor() {
+        this.isinCodeConfig = vscode.workspace.getConfiguration('isin-code');
+    }
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
-    });
+  public async provideHover(
+    document: TextDocument,
+    position: Position,
+    token: CancellationToken
+  ): Promise<Hover> {
+    let wordRange = document.getWordRangeAtPosition(position);
+    let word = wordRange ? document.getText(wordRange) : "";
+    let unescapedWord = word.replace('"', '').replace('\'', '');
+    console.log(unescapedWord);
 
-    context.subscriptions.push(disposable);
+    if (!wordRange || !unescapedWord.match(/^[A-Z]{2}[A-Z0-9]{9}\d$/)) {
+      return Promise.resolve(new Hover(""));
+    }
+
+    let headers: OutgoingHttpHeaders = {
+        'Content-Type': 'application/json',
+    };
+    console.log(this.isinCodeConfig.OpenFIGIAPIKey)
+    if (this.isinCodeConfig.OpenFIGIAPIKey !== '') {
+        headers['X-OPENFIGI-APIKEY'] = this.isinCodeConfig.OpenFIGIAPIKey;
+    }
+    return axios
+      .request({
+          'url': 'https://api.openfigi.com/v1/mapping',
+          'method': 'POST',
+          'data': [ { idType: "ID_ISIN", idValue: unescapedWord } ],
+          headers
+      }
+        )
+      .then((response: { data: OpenFIGIAPIResponse }) => {
+        const firstData = response.data[0];
+        const name = firstData.data[0].name;
+        const type = firstData.data[0].securityType;
+        let hoverTexts: MarkdownString[] = [];
+        hoverTexts.push(
+          new MarkdownString(`` + `**${name}**\n\n ` + `_${type}_`)
+        );
+        let hover = new Hover(hoverTexts);
+        return hover;
+      })
+      .catch((error: AxiosError) => {
+        if (error.response && error.response.status === 429) {
+          return new Hover(
+            "You made too many requests, wait a minute and try again."
+          );
+        }
+        return new Hover(
+          "Could not retrieve the name corresponding to that ISIN Code."
+        );
+      });
+  }
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() {
-}
+export function deactivate() {}

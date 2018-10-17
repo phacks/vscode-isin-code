@@ -11,16 +11,24 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "*"
     ],
     "main": "./out/extension",
+    "capabilities": {
+        "hoverProvider": "true"
+    },
     "contributes": {
-        "commands": [
-            {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+        "configuration": {
+            "type": "object",
+            "title": "ISIN Code configuration",
+            "properties": {
+                "isin-code.OpenFIGIAPIKey": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Your OpenFIGI API Key"
+                }
             }
-        ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -35,5 +43,8 @@
         "tslint": "^5.8.0",
         "@types/node": "^8.10.25",
         "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "axios": "^0.18.0"
     }
 }
