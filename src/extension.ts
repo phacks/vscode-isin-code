@@ -48,7 +48,7 @@ class ISINCodeHoverProvider implements HoverProvider {
     let headers: OutgoingHttpHeaders = {
         'Content-Type': 'application/json',
     };
-    console.log(this.isinCodeConfig.OpenFIGIAPIKey)
+
     if (this.isinCodeConfig.OpenFIGIAPIKey !== '') {
         headers['X-OPENFIGI-APIKEY'] = this.isinCodeConfig.OpenFIGIAPIKey;
     }
