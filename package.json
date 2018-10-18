@@ -1,9 +1,29 @@
 {
     "name": "isin-code",
-    "displayName": "ISIN Code",
-    "description": "Displays the name associated with a given ISIN code",
+    "displayName": "ISIN Code Lookup",
+    "description": "Quickly lookup an ISIN code for basic information.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/phacks/vscode-isin-code.git"
+    },
+    "homepage": "https://github.com/phacks/vscode-isin-code/blob/master/README.md",
+    "license": "SEE LICENSE IN LICENSE.txt",
+    "galleryBanner": {
+        "color": "#302b63",
+        "theme": "dark"
+    },
+    "keywords": [
+        "isin",
+        "ISIN",
+        "lookup",
+        "finance",
+        "funds",
+        "financial"
+    ],
+    "preview": true,
     "version": "0.0.1",
     "publisher": "phacks",
+    "icon": "images/icon-256x256.png",
     "engines": {
         "vscode": "^1.28.0"
     },

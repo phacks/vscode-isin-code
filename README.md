@@ -6,17 +6,13 @@ The ISIN Code VS Code extension displays the name and type of an ISIN code.
 
 📟 Displays the name and type of an ISIN code on hover.
 
-![Isin code hovering](images/isin-code.gif)
+![isin-code](https://user-images.githubusercontent.com/2587348/47117786-a2d1fa00-d265-11e8-8e87-742caba85812.gif)
 
 ## Extension Settings
-
-This extension contributes the following settings:
 
 * `isin-code.OpenFIGIAPIKey`: Add your OpenFIGI API Key to bypass the standard rate-limit (5 requests per minute).
 
 ## Known Issues
-
-- For now it only works with plain text documents (`.txt`).
 
 ## Release Notes
 
