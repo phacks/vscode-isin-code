@@ -21,7 +21,7 @@
         "financial"
     ],
     "preview": true,
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "phacks",
     "icon": "images/icon-256x256.png",
     "engines": {
