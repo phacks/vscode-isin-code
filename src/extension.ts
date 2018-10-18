@@ -39,9 +39,9 @@ class ISINCodeHoverProvider implements HoverProvider {
   ): Promise<Hover> {
     let wordRange = document.getWordRangeAtPosition(position);
     let word = wordRange ? document.getText(wordRange) : "";
-    let unescapedWord = word.replace(/["':{}\s]/g, '');
+    let isinCodeMatch = word.match(/[A-Z]{2}[A-Z0-9]{9}\d/);
 
-    if (!wordRange || !unescapedWord.match(/^[A-Z]{2}[A-Z0-9]{9}\d$/)) {
+    if (!wordRange || !isinCodeMatch) {
       return Promise.resolve(new Hover(""));
     }
 
@@ -56,7 +56,7 @@ class ISINCodeHoverProvider implements HoverProvider {
       .request({
           'url': 'https://api.openfigi.com/v1/mapping',
           'method': 'POST',
-          'data': [ { idType: "ID_ISIN", idValue: unescapedWord } ],
+          'data': [ { idType: "ID_ISIN", idValue: isinCodeMatch[0] } ],
           headers
       }
         )
@@ -78,7 +78,7 @@ class ISINCodeHoverProvider implements HoverProvider {
           );
         }
         return new Hover(
-          "Could not retrieve the name corresponding to that ISIN Code."
+          "Error: could not retrieve the name corresponding to that ISIN Code."
         );
       });
   }
