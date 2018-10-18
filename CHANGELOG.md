@@ -1,8 +1,10 @@
 # Change Log
-All notable changes to the "isin-code" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### 0.0.2
+
+- Removed unnecessary regex match for better performance
+- Added more file types (Python, R)
 
 ## 0.0.1
 
-- Initial release
+- Functional hover box with basic info on ISIN code

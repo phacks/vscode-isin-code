@@ -74,7 +74,7 @@ class ISINCodeHoverProvider implements HoverProvider {
       .catch((error: AxiosError) => {
         if (error.response && error.response.status === 429) {
           return new Hover(
-            "You made too many requests, wait a minute and try again."
+            "You made too many requests, wait a minute and try again or register for free on OpenFIGI (see README for details)."
           );
         }
         return new Hover(
