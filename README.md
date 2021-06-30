@@ -38,4 +38,4 @@ API Key will be displayed.
 
 ### 0.0.1
 
-Functional hover box with basic info on ISIN code
+Functional hover box with basic info on ISIN code 🎉
